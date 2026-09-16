@@ -1,0 +1,610 @@
+<style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Crete+Round&family=DM+Sans:wght@400;700&display=swap');
+
+:root {
+  --bcasp-dark: #15264c;
+  --bcasp-blue: #3ca5d5;
+  --bcasp-light: #b8e4f2;
+  --bcasp-grey: #707070;
+  --bcasp-danger: #e57373;
+  --bcasp-orange: #fb923c;
+  --bcasp-green: #22c55e;
+}
+
+body {
+  background-color: #f8fafc;
+  margin: 0;
+  padding: 30px;
+  font-size: 1.2rem;
+}
+
+.bcasp-main-wrapper {
+  font-family: 'DM Sans', sans-serif;
+  max-width: 1500px;
+  margin: 0 auto;
+  color: var(--bcasp-dark);
+}
+
+.visualizer-section {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 15px rgba(21, 38, 76, 0.08);
+  border-top: 6px solid var(--bcasp-blue);
+  box-sizing: border-box;
+  margin-bottom: 30px;
+}
+
+.chart-container {
+  width: 100%;
+  height: 550px;
+  margin-top: 25px;
+  position: relative;
+}
+
+.bcasp-title {
+  font-family: 'Crete Round', serif;
+  font-size: 2.6rem;
+  margin: 0;
+  color: var(--bcasp-dark);
+}
+
+.section-subtitle {
+  margin-top: 8px;
+  font-size: 1.25rem;
+  color: var(--bcasp-grey);
+}
+
+.table-responsive {
+  overflow-x: auto;
+  margin-top: 25px;
+  border-radius: 12px;
+  border: 1px solid var(--bcasp-light);
+}
+
+.format-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  font-size: 1.35rem;
+}
+
+.format-table th {
+  background: var(--bcasp-dark);
+  color: white;
+  text-align: left;
+  padding: 16px 18px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+}
+
+.format-table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid #f0f9ff;
+}
+
+.row-composite {
+  background: #f0f9ff !important;
+}
+
+.editable-input {
+  width: 100%;
+  border: 1px solid transparent;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 1.3rem;
+  background: transparent;
+  transition: all 0.2s;
+}
+
+.editable-input:hover {
+  background: rgba(60, 165, 213, 0.05);
+  border-color: #e2e8f0;
+}
+
+.editable-input:focus {
+  border-color: var(--bcasp-blue);
+  background: white;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(60, 165, 213, 0.1);
+}
+
+.row-composite .name-input {
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.row-subtest .name-input {
+  text-transform: capitalize;
+}
+
+.score-input {
+  font-weight: 700;
+  color: var(--bcasp-dark);
+  border: 1px solid #e2e8f0;
+  background: #fcfdfe;
+  text-align: center;
+  width: 100px;
+  font-size: 1.3rem;
+}
+
+.score-input-subtest {
+  font-weight: normal !important;
+}
+
+.color-cell {
+  text-align: center;
+}
+
+.color-swatch {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  background: none;
+}
+
+.color-swatch:hover {
+  border-color: var(--bcasp-blue);
+}
+
+.action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.bcasp-btn {
+  background-color: var(--bcasp-dark);
+  color: white;
+  padding: 16px 28px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bcasp-btn:hover { background-color: var(--bcasp-blue); }
+
+.bcasp-btn-outline {
+  background: white;
+  border: 2px solid var(--bcasp-dark);
+  color: var(--bcasp-dark);
+}
+
+.btn-danger {
+  background: none;
+  border: none;
+  color: var(--bcasp-danger);
+  cursor: pointer;
+  font-size: 2.2rem;
+  padding: 5px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  line-height: 1;
+}
+
+.btn-danger:hover { opacity: 1; }
+
+.footer-actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 20px;
+}
+
+.header-label-stack {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.unbold { font-weight: normal !important; }
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="bcasp-main-wrapper">
+<div class="visualizer-section">
+<div class="action-bar">
+<div>
+<h2 class="bcasp-title">Performance Profile</h2>
+
+<p class="section-subtitle">Visual representation of Index and Subtest scores. Shaded area represents the Average range (90-109).</p>
+</div>
+<button class="bcasp-btn bcasp-btn-outline" onclick="downloadVisual()" type="button">Download Visual (.png)</button></div>
+
+<div class="chart-container"><canvas id="performanceChart"></canvas></div>
+</div>
+
+<div class="visualizer-section">
+<div class="action-bar">
+<div>
+<h2 class="bcasp-title">Scoring Table Generator</h2>
+
+<p class="section-subtitle">Enter scores below to generate the comparison table. Click a colour swatch to customize that bar's colour on the chart above.</p>
+</div>
+
+<div style="display:flex; gap:15px;"><button class="bcasp-btn bcasp-btn-outline" onclick="resetTable()" type="button">Reset All</button><button class="bcasp-btn" onclick="exportTableToDoc()" type="button">Download Table (.doc)</button></div>
+</div>
+
+<div class="table-responsive">
+<table class="format-table" id="dynamicTable">
+	<thead>
+		<tr>
+			<th style="width: 4%;">&nbsp;</th>
+			<th style="width: 36%;">
+			<div class="header-label-stack"><strong>INDEX</strong> <span class="unbold">Subtest</span></div>
+			</th>
+			<th style="width: 18%;">
+			<div class="header-label-stack"><strong>STANDARD SCORE</strong> <span class="unbold">Scaled Score</span></div>
+			</th>
+			<th style="width: 11%;">PERCENTILE</th>
+			<th style="width: 18%;">DESCRIPTION</th>
+			<th style="width: 9%;">COLOUR</th>
+			<th style="width: 4%;">&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody id="gridBody">
+	</tbody>
+</table>
+</div>
+
+<div class="footer-actions"><button class="bcasp-btn bcasp-btn-outline" onclick="addRow(true)" type="button">+ Add Composite (Index)</button><button class="bcasp-btn bcasp-btn-outline" onclick="addRow(false)" type="button">+ Add Subtest</button></div>
+</div>
+</div>
+<script>
+let chartInstance;
+
+const initialData = [
+  { name: "FULL SCALE IQ", score: "100", isComp: true }
+];
+
+const visualPlugins = {
+  id: 'visual_customizations',
+  beforeDraw: (chart) => {
+    const { ctx, chartArea: { top, bottom }, scales: { x } } = chart;
+
+    ctx.save();
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+
+    ctx.save();
+    const startX = x.getPixelForValue(90);
+    const endX = x.getPixelForValue(109);
+    ctx.fillStyle = 'rgba(34, 197, 94, 0.15)';
+    ctx.fillRect(startX, top, endX - startX, bottom - top);
+
+    const meanX = x.getPixelForValue(100);
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(112, 112, 112, 0.5)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 4]);
+    ctx.moveTo(meanX, top);
+    ctx.lineTo(meanX, bottom);
+    ctx.stroke();
+    ctx.restore();
+  }
+};
+
+function initChart() {
+  const canvas = document.getElementById('performanceChart');
+  const ctx = canvas.getContext('2d');
+
+  chartInstance = new Chart(ctx, {
+    type: 'bar',
+    plugins: [visualPlugins],
+    data: {
+      labels: [],
+      datasets: [{
+        data: [],
+        backgroundColor: '#15264c',
+        borderRadius: 4,
+        barThickness: 30
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          min: 40,
+          max: 160,
+          ticks: { stepSize: 15, font: { size: 14, weight: 'bold' } },
+          title: { display: true, text: 'Standard Score (Mean=100)', font: { size: 16, weight: 'bold' } },
+          grid: { color: '#e2e8f0', z: 0 }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { font: { size: 15, weight: '500' } }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          bodyFont: { size: 14 },
+          titleFont: { size: 14 },
+          callbacks: { label: (context) => `Standard Score: ${context.raw}` }
+        }
+      }
+    }
+  });
+}
+
+function toTitleCase(str) {
+  return str.toLowerCase().split(' ').map(word => (
+    word.charAt(0).toUpperCase() + word.slice(1)
+  )).join(' ');
+}
+
+function erf(x) {
+  const a = [0.254829592, -0.284496736, 1.421413741, -1.453152027, 1.061405429];
+  const p = 0.3275911;
+  const sign = (x < 0) ? -1 : 1;
+  x = Math.abs(x);
+  const t = 1.0 / (1.0 + p * x);
+  return sign * (1.0 - (((((a[4] * t + a[3]) * t) + a[2]) * t + a[1]) * t + a[0]) * t * Math.exp(-x * x));
+}
+
+function calculatePercentile(ss) {
+  const z = (ss - 100) / 15;
+  const p = 0.5 * (1 + erf(z / Math.sqrt(2))) * 100;
+  return p < 0.5 ? "<1" : (p > 99.5 ? ">99" : Math.round(p));
+}
+
+function getQualitative(ss) {
+  if (ss >= 130) return "Exceptionally High";
+  if (ss >= 120) return "Above Average";
+  if (ss >= 110) return "High Average";
+  if (ss >= 90)  return "Average";
+  if (ss >= 80)  return "Low Average";
+  if (ss >= 70)  return "Below Average";
+  return "Exceptionally Low";
+}
+
+function autoBarColor(ss) {
+  if (ss >= 130) return '#b8e4f2';
+  if (ss >= 110) return '#3ca5d5';
+  if (ss >= 90)  return '#22c55e';
+  if (ss >= 80)  return '#fb923c';
+  return '#e57373';
+}
+
+function updateRow(row) {
+  const scoreInput = row.querySelector('.score-input');
+  const nameInput = row.querySelector('.name-input');
+  const prOut = row.querySelector('.pr-out');
+  const descOut = row.querySelector('.desc-out');
+  const colorInput = row.querySelector('.color-swatch');
+
+  const isComp = row.classList.contains('row-composite');
+
+  if (isComp) nameInput.value = (nameInput.value || "").toUpperCase();
+  else nameInput.value = toTitleCase(nameInput.value || "");
+
+  const val = parseFloat(scoreInput.value);
+  if (isNaN(val)) {
+    prOut.value = "";
+    descOut.value = "";
+    if (row.dataset.autoColor !== 'false' && colorInput) colorInput.value = '#94a3b8';
+    updateChart();
+    return;
+  }
+
+  const ss = isComp ? val : ((val - 10) / 3 * 15) + 100;
+
+  prOut.value = calculatePercentile(ss);
+  descOut.value = getQualitative(ss);
+
+  if (row.dataset.autoColor !== 'false' && colorInput) {
+    colorInput.value = autoBarColor(ss);
+  }
+
+  updateChart();
+}
+
+function updateChart() {
+  if (!chartInstance) return;
+
+  const labels = [];
+  const data = [];
+  const colors = [];
+
+  document.querySelectorAll('#gridBody tr').forEach(tr => {
+    const name = tr.querySelector('.name-input')?.value || "";
+    const scoreIn = parseFloat(tr.querySelector('.score-input')?.value);
+    const colorIn = tr.querySelector('.color-swatch')?.value || '#15264c';
+
+    if (!isNaN(scoreIn)) {
+      const isComp = tr.classList.contains('row-composite');
+      const ss = isComp ? scoreIn : ((scoreIn - 10) / 3 * 15) + 100;
+      labels.push(name || "Untitled");
+      data.push(Math.round(ss));
+      colors.push(colorIn);
+    }
+  });
+
+  chartInstance.data.labels = labels;
+  chartInstance.data.datasets[0].data = data;
+  chartInstance.data.datasets[0].backgroundColor = colors;
+
+  chartInstance.update();
+}
+
+function addRow(isComp = false, data = null) {
+  const body = document.getElementById('gridBody');
+  const tr = document.createElement('tr');
+
+  const finalIsComp = data ? !!data.isComp : !!isComp;
+  tr.className = finalIsComp ? 'row-composite' : 'row-subtest';
+  tr.dataset.autoColor = data && data.color ? 'false' : 'true';
+
+  const initialColor = data && data.color ? data.color : '#94a3b8';
+
+  tr.innerHTML = `
+    <td style="text-align:center; color:#cbd5e1; cursor:default; font-size:1.6rem;"></td>
+    <td><input type="text" class="editable-input name-input" placeholder="${finalIsComp ? 'INDEX...' : 'Subtest...'}" value="${data ? (data.name || '') : ''}"></td>
+    <td>
+      <input type="number" class="editable-input score-input ${!finalIsComp ? 'score-input-subtest' : ''}" value="${data ? (data.score || '') : ''}" placeholder="${finalIsComp ? 'SS' : 'Scl'}">
+    </td>
+    <td><input type="text" class="editable-input pr-out" readonly tabindex="-1"></td>
+    <td><input type="text" class="editable-input desc-out" readonly tabindex="-1"></td>
+    <td class="color-cell"><input type="color" class="color-swatch" value="${initialColor}" title="Bar colour"></td>
+    <td><button class="btn-danger" type="button" title="Remove Row" onclick="this.closest('tr').remove(); updateChart();">×</button></td>
+  `;
+
+  body.appendChild(tr);
+
+  const nameIn = tr.querySelector('.name-input');
+  const scoreIn = tr.querySelector('.score-input');
+  const colorIn = tr.querySelector('.color-swatch');
+
+  [nameIn, scoreIn].forEach(el => el.addEventListener('input', () => updateRow(tr)));
+
+  colorIn.addEventListener('input', () => {
+    tr.dataset.autoColor = 'false';
+    updateChart();
+  });
+
+  if (data || (scoreIn && scoreIn.value)) updateRow(tr);
+}
+
+function downloadVisual() {
+  const canvas = document.getElementById('performanceChart');
+  const link = document.createElement('a');
+  link.download = 'Performance_Profile.png';
+  link.href = canvas.toDataURL('image/png', 1.0);
+  link.click();
+}
+
+/*
+  UPDATED: .DOC export formatting
+  Composite rows:
+  - No shading (no background color)
+  - Bold across ALL cells
+*/
+function exportTableToDoc() {
+  let htmlContent = `
+    <html xmlns:o='urn:schemas-microsoft-com:office:office'
+          xmlns:w='urn:schemas-microsoft-com:office:word'
+          xmlns='http://www.w3.org/TR/REC-html40'>
+    <head>
+      <meta charset='utf-8'>
+      <title>Assessment Table</title>
+      <style>
+        body { font-family: 'Times New Roman', serif; }
+        table { border-collapse: collapse; width: 100%; font-size: 11pt; }
+        th {
+          background-color: #15264c;
+          color: white;
+          padding: 6pt;
+          border: 1pt solid #000;
+          text-align: left;
+        }
+        td {
+          padding: 6pt;
+          border: 1pt solid #000;
+          vertical-align: middle;
+        }
+
+        /* Composite rows: bold everywhere, NO shading */
+        .composite-row td {
+          font-weight: bold;
+          background-color: transparent !important;
+        }
+
+        /* Optional: keep subtest capitalization without affecting composite */
+        .subtest-name { text-transform: capitalize; }
+        .composite-name { text-transform: uppercase; }
+      </style>
+    </head>
+    <body>
+      <h2 style="font-size:14pt;">Assessment Performance Results</h2>
+      <table>
+        <thead>
+          <tr>
+            <th><strong>INDEX</strong><br><span style="font-weight:normal;">Subtest</span></th>
+            <th><strong>STANDARD SCORE</strong><br><span style="font-weight:normal;">Scaled Score</span></th>
+            <th><strong>PERCENTILE</strong></th>
+            <th><strong>DESCRIPTION</strong></th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  document.querySelectorAll('#gridBody tr').forEach(tr => {
+    const isComp = tr.classList.contains('row-composite');
+
+    const name = tr.querySelector('.name-input')?.value || '';
+    const score = tr.querySelector('.score-input')?.value || '';
+    const pr = tr.querySelector('.pr-out')?.value || '';
+    const desc = tr.querySelector('.desc-out')?.value || '';
+
+    if (isComp) {
+      htmlContent += `
+        <tr class="composite-row">
+          <td class="composite-name">${name}</td>
+          <td style="text-align:center">${score}</td>
+          <td style="text-align:center">${pr}</td>
+          <td>${desc}</td>
+        </tr>
+      `;
+    } else {
+      htmlContent += `
+        <tr>
+          <td class="subtest-name">${name}</td>
+          <td style="text-align:center">${score}</td>
+          <td style="text-align:center">${pr}</td>
+          <td>${desc}</td>
+        </tr>
+      `;
+    }
+  });
+
+  htmlContent += `
+        </tbody>
+      </table>
+    </body>
+    </html>
+  `;
+
+  const blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'Assessment_Scores_Table.doc';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function resetTable() {
+  document.getElementById('gridBody').innerHTML = "";
+  initialData.forEach(d => addRow(d.isComp, d));
+  updateChart();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initChart();
+  resetTable();
+});
+</script>
